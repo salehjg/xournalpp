@@ -230,7 +230,10 @@ double PenInputHandler::filterPressure(PositionInputData const& pos, XojPageView
 
     Settings* settings = this->inputContext->getSettings();
     xoj_assert(settings->getMinimumPressure() >= 0.01);
-    return std::max(settings->getMinimumPressure(), filteredPressure * settings->getPressureMultiplier());
+    double v = filteredPressure;
+    v *= settings->getMinimumPressure() < v;
+    v *= settings->getPressureMultiplier();
+    return v;
 }
 
 bool PenInputHandler::isCurrentTapSelection(InputEvent const& event) const {
